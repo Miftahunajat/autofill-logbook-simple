@@ -30,13 +30,13 @@ def do_job
 
   driver.get 'https://online.mis.pens.ac.id/mEntry_Logbook_KP1.php'
 
-  wait.until { driver.find_element(:id, 'jam_mulai').displayed? }
+  wait.until { find_element_by_id('jam_mulai').displayed? }
 
   find_element_by_id('jam_mulai').send_keys '09:00'
 
   find_element_by_id('jam_selesai').send_keys '18:00'
 
-  find_element_by_id('kegiatan').send_keys 'Sprint Review'
+  find_element_by_id('kegiatan').send_keys 'Sprint planning and make UAT'
 
   find_element_by_id('sesuai_kuliah1').click
 
@@ -46,12 +46,15 @@ def do_job
 
   find_element_by_id('Setuju').click
 
-  byebug
   driver.find_element(:xpath, "//input[@value='Simpan']").click
 
-  driver.switch_to.alert.accept
+  begin
+    driver.switch_to.alert.accept
+  rescue NoAlertOpenError
+    Selenium::WebDriver::Error::NoAlertOpenError
+  end
 
-  wait.until { find_element_by_id('asda').displayed? }
+  wait.until { find_element_by_id('finish').displayed? }
 end
 
 start
