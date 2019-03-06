@@ -7,9 +7,9 @@ driver.get 'https://online.mis.pens.ac.id/'
 
 driver.find_element(:xpath, "//a[@href='index.php?Login=1']").click
 
-driver.find_element(:id, 'username').send_keys 'mail@it.student.pens.ac.id'
+driver.find_element(:id, 'username').send_keys 'miftahunajat@it.student.pens.ac.id'
 
-driver.find_element(:id, 'password').send_keys 'PASSWORd'
+driver.find_element(:id, 'password').send_keys 'Uselesswater1'
 
 driver.find_element(:xpath, "//input[@value='LOGIN']").click()
 
@@ -25,7 +25,7 @@ driver.find_element(:id, 'jam_mulai').send_keys '09:00'
 
 driver.find_element(:id, 'jam_selesai').send_keys '18:00'
 
-driver.find_element(:id, 'kegiatan').send_keys 'Sprint Review'
+driver.find_element(:id, 'kegiatan').send_keys 'Mengerjakan Documentasi API.'
 
 driver.find_element(:id, 'sesuai_kuliah1').click
 
@@ -40,5 +40,3 @@ driver.find_element(:xpath, "//input[@value='Simpan']").click()
 driver.switch_to.alert.accept
 
 wait.until { driver.find_element(:id, 'asda').displayed? }
-
-
