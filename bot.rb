@@ -1,42 +1,60 @@
 require 'selenium-webdriver'
 require 'byebug'
 
-driver = Selenium::WebDriver.for:chrome
+def start
+  @driver = Selenium::WebDriver.for :chrome
+  @wait = Selenium::WebDriver::Wait.new(timeout: 10) # seconds
 
-driver.get 'https://online.mis.pens.ac.id/'
+  do_job
+end
 
-driver.find_element(:xpath, "//a[@href='index.php?Login=1']").click
+def find_element_by_id(id)
+  @driver.find_element(:id, id)
+end
 
-driver.find_element(:id, 'username').send_keys 'miftahunajat@it.student.pens.ac.id'
+def do_job
+  driver = @driver
+  wait = @wait
 
-driver.find_element(:id, 'password').send_keys 'Uselesswater1'
+  driver.get 'https://online.mis.pens.ac.id/'
 
-driver.find_element(:xpath, "//input[@value='LOGIN']").click()
+  driver.find_element(:xpath, "//a[@href='index.php?Login=1']").click
 
+  find_element_by_id('username').send_keys 'miftahunajat@it.student.pens.ac.id'
 
-wait = Selenium::WebDriver::Wait.new(:timeout => 10) # seconds
-wait.until { driver.find_element(:xpath, "//a[@href='mSetting.php']").displayed? }
+  find_element_by_id('password').send_keys 'Uselesswater1'
 
-driver.get 'https://online.mis.pens.ac.id/mEntry_Logbook_KP1.php'
+  driver.find_element(:xpath, "//input[@value='LOGIN']").click
 
-wait.until { driver.find_element(:id, 'jam_mulai').displayed? }
+  wait.until { driver.find_element(:xpath, "//a[@href='mSetting.php']").displayed? }
 
-driver.find_element(:id, 'jam_mulai').send_keys '09:00'
+  driver.get 'https://online.mis.pens.ac.id/mEntry_Logbook_KP1.php'
 
-driver.find_element(:id, 'jam_selesai').send_keys '18:00'
+  wait.until { find_element_by_id('jam_mulai').displayed? }
 
-driver.find_element(:id, 'kegiatan').send_keys 'Mengerjakan Documentasi API.'
+  find_element_by_id('jam_mulai').send_keys '09:00'
 
-driver.find_element(:id, 'sesuai_kuliah1').click
+  find_element_by_id('jam_selesai').send_keys '18:00'
 
-drop_down = driver.find_element(:id, 'matakuliah')
+  find_element_by_id('kegiatan').send_keys 'Membuat logging aplikasi'
 
-Selenium::WebDriver::Support::Select.new(drop_down).select_by(:value, '21937')
+  find_element_by_id('sesuai_kuliah1').click
 
-driver.find_element(:id, 'Setuju').click unless driver.find_element(:id, 'Setuju').attribute('checked')
+  drop_down = find_element_by_id('matakuliah')
 
-driver.find_element(:xpath, "//input[@value='Simpan']").click()
+  Selenium::WebDriver::Support::Select.new(drop_down).select_by(:value, '21937')
 
-driver.switch_to.alert.accept
+  find_element_by_id('Setuju').click
 
-wait.until { driver.find_element(:id, 'asda').displayed? }
+  driver.find_element(:xpath, "//input[@value='Simpan']").click
+
+  begin
+    driver.switch_to.alert.accept
+  rescue NoAlertOpenError
+    Selenium::WebDriver::Error::NoAlertOpenError
+  end
+
+  wait.until { find_element_by_id('finish').displayed? }
+end
+
+start
