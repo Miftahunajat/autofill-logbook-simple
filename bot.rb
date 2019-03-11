@@ -1,5 +1,6 @@
 require 'selenium-webdriver'
 require 'byebug'
+require_relative 'drive_client'
 
 def start
   @driver = Selenium::WebDriver.for :chrome
@@ -13,6 +14,7 @@ def find_element_by_id(id)
 end
 
 def do_job
+  client = DriveClient.new
   driver = @driver
   wait = @wait
 
@@ -32,11 +34,16 @@ def do_job
 
   wait.until { find_element_by_id('jam_mulai').displayed? }
 
+  kegiatan = client.get_current_kegiatan
+
+  find_element_by_id('jam_mulai').send_keys ''
   find_element_by_id('jam_mulai').send_keys '09:00'
 
+  find_element_by_id('jam_selesai').send_keys ''
   find_element_by_id('jam_selesai').send_keys '18:00'
 
-  find_element_by_id('kegiatan').send_keys 'Membuat logging aplikasi'
+  find_element_by_id('kegiatan').send_keys ''
+  find_element_by_id('kegiatan').send_keys kegiatan
 
   find_element_by_id('sesuai_kuliah1').click
 
@@ -44,7 +51,7 @@ def do_job
 
   Selenium::WebDriver::Support::Select.new(drop_down).select_by(:value, '21937')
 
-  find_element_by_id('Setuju').click
+  find_element_by_id('Setuju').click unless find_element_by_id('Setuju').attribute("checked")
 
   driver.find_element(:xpath, "//input[@value='Simpan']").click
 
@@ -54,7 +61,11 @@ def do_job
     Selenium::WebDriver::Error::NoAlertOpenError
   end
 
-  wait.until { find_element_by_id('finish').displayed? }
+  begin
+    wait.until { find_element_by_id('finish').displayed? }
+  rescue StandardError
+
+  end
 end
 
 start
