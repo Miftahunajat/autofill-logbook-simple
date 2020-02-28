@@ -22,9 +22,9 @@ def do_job
 
   driver.find_element(:xpath, "//a[@href='index.php?Login=1']").click
 
-  find_element_by_id('username').send_keys 'miftahunajat@it.student.pens.ac.id'
+  find_element_by_id('username').send_keys 'you_email'
 
-  find_element_by_id('password').send_keys 'Uselesswater1'
+  find_element_by_id('password').send_keys 'you_pass'
 
   driver.find_element(:xpath, "//input[@value='LOGIN']").click
 
